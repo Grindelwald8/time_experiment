@@ -2,19 +2,23 @@ rr = '{"results":[{"statement_id":0,"series":[{"name":"upstreams","tags":{"name"
 
 #print(type(rr))
 rr = rr.split(',')
-#print(rr)
+print(rr)
 
 upstreams = []
 count = []
+index_value = 6
+print("len rr = ", len(rr))
 for i in range(0,len(rr)):
     if "values" in rr[i]:
         print(rr[i])
-        index = rr.index(rr[i])
-        print(rr[index+1])
-        buff = rr[index+1]
+#        index = rr.index(rr[i])
+        print("index = ", index_value)
+        print(rr[index_value])
+        buff = rr[index_value]
         buff = buff.replace("]","")
         buff = buff.replace("}","")
-#        print(buff)
+        print(buff)
+        index_value = index_value + 6
         count.append(int(buff))
 
     if "tags" in rr[i]:
