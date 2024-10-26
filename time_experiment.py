@@ -3,35 +3,59 @@ result = '{"results":[{"statement_id":0,"series":[{"name":"upstreams","tags":{"n
 #print(type(rr))
 rr = result.split(',')
 print(rr)
+print("len rr = ", len(rr))
+
+def analiz_requests(rr,count,upstreams):
+    index_value = 6 #kagdie 6 index - value
+    for i in range(0,len(rr)):
+        if "values" in rr[i]: #dostaem value
+#            print(rr[i])
+    #        index = rr.index(rr[i])
+#            print("index = ", index_value)
+#            print(rr[index_value])
+            buff = rr[index_value]
+            buff = buff.replace("]","")
+            buff = buff.replace("}","")
+#            print(buff)
+            index_value = index_value + 6
+            count.append(int(buff))
+        if "tags" in rr[i]: #dostaem upstream-name
+    #        print(rr[i])
+            buff = rr[i]
+            buff = buff.split('"')
+    #        print(buff[5])
+            upstreams.append(buff[5])
+    #        print(rr[3])
+
 
 upstreams = []
-count = []
-index_value = 6
-print("len rr = ", len(rr))
-for i in range(0,len(rr)):
-    if "values" in rr[i]:
-        print(rr[i])
-#        index = rr.index(rr[i])
-        print("index = ", index_value)
-        print(rr[index_value])
-        buff = rr[index_value]
-        buff = buff.replace("]","")
-        buff = buff.replace("}","")
-        print(buff)
-        index_value = index_value + 6
-        count.append(int(buff))
+count_arr = []
 
-    if "tags" in rr[i]:
-#        print(rr[i])
-        buff = rr[i]
-        buff = buff.split('"')
-#        print(buff[5])
-        upstreams.append(buff[5])
-#        print(rr[3])
-
-
+analiz_requests(rr, count_arr, upstreams)
 
 print(upstreams)
-print(count)
-for i in range(0,len(upstreams)):
-    print(upstreams[i], " = ",count[i], "\n")
+print(count_arr)
+# for i in range(0,len(upstreams)):
+#     print(upstreams[i], " = ",count_arr[i], "\n")
+
+result = '{"results":[{"statement_id":0}]}'
+result2 = '{"results":[{"statement_id":0,"series":[{"name":"upstreams","tags":{"name":"int-lp-upstream"},"columns":["time","sum"],"values":[["2024-10-24T06:45:54.31947196Z",2]]},{"name":"upstreams","tags":{"name":"int-otrs-upstream"},"columns":["time","sum"],"values":[["2024-10-24T06:45:54.31947196Z",2]]},{"name":"upstreams","tags":{"name":"int-rms-upstream"},"columns":["time","sum"],"values":[["2024-10-24T06:45:54.31947196Z",2]]}]}]}'
+
+rr = result2.split(',')
+
+print(rr)
+if isinstance(rr,str):
+    print(type(rr))
+else:
+    print(len(rr))
+    upstreams2 = []
+    count_arr2 = []
+
+    analiz_requests(rr, count_arr2, upstreams2)
+    print(upstreams2)
+    print(count_arr2)
+
+    for i in range(0,len(upstreams2)):
+        if upstreams2[i] in upstreams:
+            if count_arr2[i] < count_arr[i]:
+                print("alert!!!!")
